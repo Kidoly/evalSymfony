@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Ajouter un nouveau relevé
+{% endblock %}
+
+{% block body %}
+	<h1>Ajouter un nouveau relevé</h1>
+
+	{{ include('releve/_form.html.twig') }}
+
+	<a class="btn btn-primary" href="{{ path('app_releve_index') }}">Retour à la liste</a>
+{% endblock %}

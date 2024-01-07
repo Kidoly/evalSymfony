@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Relevés
+{% endblock %}
+
+{% block body %}
+	<h1>Relevés</h1>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Date</th>
+				<th>Lieu</th>
+				<th>Relevé brut</th>
+				<th>Tableau</th>
+				<th>Visualisation</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for releve in releves %}
+				<tr>
+					<td>{{ releve.Date ? releve.Date|date('Y-m-d') : '' }}</td>
+					<td>{{ releve.Lieu.Nom }}</td>
+					<td>{{ releve.ReleveBrut }}</td>
+					<td>
+						<table class="bordure">
+							<tbody>
+								{% set values = releve.ReleveBrut|split('/') %}
+								{% set columns = 3 %}
+
+								{% for row in values|batch(columns, 'no fill') %}
+									<tr>
+										{% for value in row %}
+											<td>{{ value }}</td>
+										{% endfor %}
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</td>
+					{% set matrice = matrices[loop.index0] %}
+					<td>
+						<table class="visualisation">
+							{% for row in matrice %}
+								<tr>
+									{% for value in row %}
+										<td class='{% if value == 1 %}vert{% endif %}'></td>
+									{% endfor %}
+								</tr>
+							{% endfor %}
+						</table>
+					</td>
+
+					<td style="display: table-cell;">
+						<a class="btn btn-primary" href="{{ path('app_releve_edit', {'id': releve.id}) }}">Modifier</a>
+						{{ include('releve/_delete_form.html.twig') }}
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="4">Aucun releve</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<a class="btn btn-primary" href="{{ path('app_releve_new') }}">Ajouter un relevé</a>
+{% endblock %}
